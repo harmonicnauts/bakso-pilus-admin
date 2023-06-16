@@ -11,12 +11,13 @@ import reducer from './context/reducer';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <Router>
-    <StateProvider initialState = {initialState} reducer={reducer}>
-      <App />
-    </StateProvider>
-
-  </Router>
+  <React.StrictMode>
+    <Router>
+      <StateProvider initialState={initialState} reducer={reducer}>
+        <App />
+      </StateProvider>
+    </Router>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

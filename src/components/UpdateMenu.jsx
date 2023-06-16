@@ -7,13 +7,19 @@ import { categories } from '../utils/data';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
 import { storage } from '../firebase.config';
-import { getAllFoodItems, saveItem } from '../utils/firebaseFunctions';
+import { getAllFoodItems, saveItem, updateItem } from '../utils/firebaseFunctions';
 import { useStateValue } from '../context/StateProvider';
 import { actionType } from '../context/reducer';
+import RowContainer from './RowContainer';
+import { Typography } from '@material-tailwind/react';
+// import { ThemeProvider, createTheme } from '@mui/material'
+// import MaterialTable from 'material-table';
+// import DataTable from './DataTable';
 
-const Admin = () => {
+const UpdateMenu = () => {
 
 	const [nama, setNama] = useState("");
+	const [id, setId] = useState('')
 	const [harga, setHarga] = useState("");
 	const [category, setCategory] = useState(null);
 	const [fields, setFields] = useState(false); //Untuk error
@@ -21,7 +27,10 @@ const Admin = () => {
 	const [msg, setMsg] = useState(null);
 	const [imageAsset, setImageAsset] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
-	const [{ }, dispatch] = useStateValue();
+	const [isUpdate, setisUpdate] = useState(false);
+	const [{ foodItems }, dispatch] = useStateValue();
+	// const [filter, setFilter] = useState("bakso");
+
 
 	const uploadImage = (e) => {
 		setIsLoading(true);
@@ -30,7 +39,7 @@ const Admin = () => {
 		const uploadTask = uploadBytesResumable(storageRef, imageFile);
 
 		uploadTask.on('state_changed', (snapshot) => {
-			const uploadProgress = snapshot.bytesTransferred / snapshot.totalBytes * 100;
+			// const uploadProgress = snapshot.bytesTransferred / snapshot.totalBytes * 100;
 		}, (error) => {
 			console.log(error)
 			setFields(true)
@@ -68,6 +77,14 @@ const Admin = () => {
 			}, 4000);
 		});
 	};
+
+	//TODO Selesain jadinya nanti pas admin klik > upload file baru > ganti link di id yang direfernsi jadi link yang baru
+	const updateImage = () => {
+		setIsLoading(true);
+		const updateRef = ref(storage, imageAsset);
+
+	};
+
 	const saveDetails = () => {
 		setIsLoading(true);
 		try {
@@ -89,24 +106,23 @@ const Admin = () => {
 					category: category,
 					qty: 1,
 					harga: harga
-
 				}
 
 				saveItem(data);
 				setIsLoading(false);
 				setFields(true);
-				setMsg('Data added successfully');
+				setMsg('Data berhasil disimpan');
 				clearData();
 				setalertStatus('success');
 				setTimeout(() => {
 					setFields(false);
 				}, 4000);
-				
+
 			}
 		} catch (error) {
 			console.log(error)
 			setFields(true)
-			setMsg('Error saving : Try again')
+			setMsg('Gagal menyimpan data')
 			setalertStatus('danger')
 			setTimeout(() => {
 				setFields(false);
@@ -117,25 +133,100 @@ const Admin = () => {
 		fetchData();
 	};
 
+	const updateDetails = (id) => {
+		setIsLoading(true);
+
+		try {
+			if (!nama || !harga || !imageAsset || !category) {
+				setFields(true)
+				setMsg('Lengkapi field yang masih kosong terlebih dahulu!')
+				setalertStatus('danger')
+				setTimeout(() => {
+					setFields(false);
+					setIsLoading(false);
+				}, 4000)
+			}
+
+			else {
+				const data = {
+					nama: nama,
+					imageURL: imageAsset,
+					category: category,
+					qty: 1,
+					harga: harga
+				}
+
+				updateItem(id, data);
+				setIsLoading(false);
+				setFields(true);
+				setMsg('Data berhasil diupdate');
+				clearData();
+				setalertStatus('success');
+				setTimeout(() => {
+					setFields(false);
+				}, 4000);
+
+			}
+		} catch (error) {
+			console.log(error)
+			setFields(true)
+			setMsg('Gagal Mengupdate')
+			setalertStatus('danger')
+			setTimeout(() => {
+				setFields(false);
+				setIsLoading(false);
+			}, 4000)
+		}
+
+		fetchData();
+	}
+
+
 	const clearData = () => {
 		setNama("");
 		setImageAsset(null);
 		setHarga("");
 		setCategory(null);
+		setisUpdate(false);
+		setId('');
+
+		const $select = document.querySelector('#select-kategori');
+		$select.value = 'other'
 	};
 
-  const fetchData = async () => {
-    await getAllFoodItems().then((data) => {
-      dispatch({
-        type: actionType.SET_FOOD_ITEMS,
-        foodItems : data,
-      });
-    }
-    );
-  };
+
+	const fetchData = async () => {
+		await getAllFoodItems().then((data) => {
+			dispatch({
+				type: actionType.SET_FOOD_ITEMS,
+				foodItems: data,
+			});
+		}
+		);
+	};
+
+	// const defaultMaterialTheme = createTheme();
+
+	// let products; // Declare the variable
+
+	// getAllFoodItems().then((data) => {
+	// 	products = data; // Assign the value of data to the products variable
+	// 	// Perform any other operations with the products variable here
+	// });
+	// console.log('products : ', products);
+	// console.log('foodItems : ', foodItems.foodItems);
+
+
 
 	return (
-		<div className='w-full h-auto min-h-screen flex items-center justify-center'>
+		<div className='w-full h-auto min-h-screen flex flex-col items-center justify-center'>
+
+			<div className='w-full py-2 flex gap-2 justify-center align-middle mb-4 mt-4'>
+				<Typography variant="h3">
+					Tambahkan Menu Baru
+				</Typography>
+			</div>
+
 			<div className='w-[90%] md:w-[75%] border border-gray-300 rounded-lg p-4 
 			flex flex-col items-center justify-center gap-4'>
 
@@ -168,6 +259,7 @@ const Admin = () => {
 				<div className='w-full'>
 					<select className='w-full outline-none text-base border-b-2 
 					border-gray-200 p-2 rounded-md cursor-pointer'
+						id='select-kategori'
 						onChange={(e) => { setCategory(e.target.value) }}>
 						<option
 							value='other'
@@ -206,12 +298,21 @@ const Admin = () => {
 						</> : (<>
 
 							<div className='relative h-full'>
-								<img src={imageAsset} alt="uploaded image" className='w-full h-full object-cover' />
-								<button type='button' className='absolute bottom-3 right-3 p-3 rounded-full bg-red-500
+								<img src={imageAsset} alt="uploaded" className='w-full h-full object-cover' />
+								{!isUpdate ?
+									<button type='button' className='absolute bottom-3 right-3 p-3 rounded-full bg-red-500
 						text-xl cursor-pointer outline-none hover:shadow-md duration-500 transition-all ease-in-out'
-									onClick={deleteImage}>
-									<MdDelete className='text-white' />
-								</button>
+										onClick={deleteImage}>
+										<MdDelete className='text-white' />
+									</button> :
+
+									<button type='button' className='absolute bottom-3 right-3 p-3 rounded-full bg-blue-500
+						text-xl cursor-pointer outline-none hover:shadow-md duration-500 transition-all ease-in-out'
+										onClick={(() => { })}>
+										<MdDelete className='text-white' />
+									</button>
+								}
+
 							</div>
 						</>)}
 					</>)}
@@ -232,13 +333,107 @@ const Admin = () => {
 				</div>
 
 				<div className='flex item-center w-full'>
-					<button type='button' className=' ml-0 md:ml-auto w-full md:w-auto border-none
+
+					{!isUpdate ? (
+						<button type='button' className=' ml-0 md:ml-auto w-full md:w-auto border-none
 					outline-none bg-emerald-500 px-12 py-2 rounded-lg text-lg text-white font-semibold'
-						onClick={saveDetails}>Simpan</button>
+							onClick={saveDetails}>Simpan</button>
+					) :
+						(
+							<div className='justify-end align-middle'>
+								<button type='button' className=' ml-0 md:ml-auto w-full md:w-auto border-none
+					outline-none bg-blue-500 px-12 py-2 rounded-lg text-lg text-white font-semibold'
+									onClick={() => updateDetails(id)}>Update
+								</button>
+
+								<button type='button' className=' ml-0 md:ml-auto w-full md:w-auto border-none
+					outline-none bg-red-500 px-12 py-2 rounded-lg text-lg text-white font-semibold'
+									onClick={clearData}>Cancel</button>
+							</div>
+						)
+					}
+
 				</div>
 			</div>
+
+			<div className='w-full py-2 flex gap-2 justify-center align-middle mb-4 mt-7'>
+				<Typography variant="h3">
+					Update Menu yang Ada
+				</Typography>
+			</div>
+
+
+			<RowContainer
+				data={foodItems}
+				setNama={setNama}
+				setCategory={setCategory}
+				setImageAsset={setImageAsset}
+				setHarga={setHarga}
+				setIsLoading={setIsLoading}
+				setisUpdate={setisUpdate}
+				setId={setId}
+			/>
+
+
+			{/* <DataTable
+				className='w-[90%] md:w-[75%] border border-gray-300 rounded-lg p-4 
+			flex flex-col items-center justify-center gap-4'
+				columns={[
+					{
+						title: "Gambar",
+						field: "imageURL",
+						render: (rowData) => (
+							<img src={rowData.imageURL} alt='gambar produk' />
+						)
+					}
+					, {
+						title: "Nama",
+						field: "nama"
+					}
+					, {
+						title: "Harga",
+						field: "harga",
+
+					}
+					, {
+						title: "Kategori",
+						field: "category",
+
+					}
+				]}
+
+				data={foodItems.foodItems}
+			/> */}
+
+
+			{/* <ThemeProvider theme={defaultMaterialTheme}>
+				<MaterialTable
+					columns={[
+						{
+							title: "Gambar",
+							field: "imageURL"
+						}
+						, {
+							title: "Nama",
+							field: "nama"
+						}
+						, {
+							title: "Harga",
+							field: "harga",
+
+						}
+						, {
+							title: "Kategori",
+							field: "category",
+
+						}]}
+
+					data={products}
+				/>
+			</ThemeProvider> */}
+
 		</div>
 	)
 }
 
-export default Admin
+export default UpdateMenu

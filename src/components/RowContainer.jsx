@@ -1,32 +1,50 @@
 import React, { useEffect, useRef, useState } from "react";
-import { MdShoppingBasket } from "react-icons/md";
+import { MdEdit, MdDelete } from "react-icons/md";
 import { motion } from "framer-motion";
 import NotFound from "../img/NotFound.png"
 import { useStateValue } from "../context/StateProvider";
 import { actionType } from "../context/reducer";
+import { deleteItem, updateItem, getAllFoodItems } from "../utils/firebaseFunctions";
 
-const RowContainer = ({ flag, data, scrollValue }) => {
+const RowContainer = ({ flag, data, nama, setNama, harga, setHarga, category, setCategory, fields, setFields, alertStatus, setalertStatus, msg, setMsg, imageAsset, setImageAsset, isLoading, setIsLoading, isUpdate, setisUpdate, id, setId }) => {
+
 	const rowContainer = useRef();
-
+	const [{ }, dispatch] = useStateValue();
 	const [items, setItems] = useState([]);
 
-	const [{ cartItems }, dispatch] = useStateValue();
+	useEffect(() => {
 
-	const addtocart = () => {
-		dispatch({
-			type: actionType.SET_CARTITEMS,
-			cartItems: items,
-		});
-		localStorage.setItem("cartItems", JSON.stringify(items));
+	}, []);
+
+	const fetchData = async () => {
+		await getAllFoodItems().then((data) => {
+			dispatch({
+				type: actionType.SET_FOOD_ITEMS,
+				foodItems: data,
+			});
+		}
+		);
 	};
 
-	useEffect(() => {
-		rowContainer.current.scrollLeft += scrollValue;
-	}, [scrollValue]);
+	const stateUpdate = (id, nama, kategori, img, harga) => {
+		setIsLoading(true);
+		setNama(nama);
 
-	useEffect(() => {
-		addtocart();
-	}, [items]);
+		setCategory(kategori);
+		const $select = document.querySelector('#select-kategori');
+		$select.value = kategori;
+
+		setImageAsset(img);
+		setHarga(harga);
+		setisUpdate(true);
+		setIsLoading(false);
+		setId(id);
+
+
+		window.scrollTo(0, 0);
+	}
+
+	// console.log('test data rowcont.js ', data.length)
 
 	return (
 		<div
@@ -53,20 +71,39 @@ const RowContainer = ({ flag, data, scrollValue }) => {
 									className="w-full h-full object-contain"
 								/>
 							</motion.div>
+
 							<motion.div
 								whileTap={{ scale: 0.75 }}
 								className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center cursor-pointer hover:shadow-md -mt-8"
-								onClick={() => setItems([...cartItems, item])}
+								onClick={() => { stateUpdate(item?.id, item?.nama, item?.category, item?.imageURL, item?.harga); }}
+							// updateItem(item?.id, item)
 							>
-								<MdShoppingBasket className="text-white" />
+								<MdEdit className="text-white" />
 							</motion.div>
+
+							<motion.div
+								whileTap={{ scale: 0.75 }}
+								className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center cursor-pointer hover:shadow-md -mt-8"
+								onClick={() => {
+									deleteItem(item?.id)
+									console.log(`item ${item}`);
+									console.log(`Data ${data}`);
+									console.log(`items ${items}`);
+									fetchData()
+								}}
+							>
+								<MdDelete className="text-white" />
+							</motion.div>
+
 						</div>
 
 						<div className="w-full flex flex-col items-end justify-end -mt-8">
-							<p className="text-textColor font-semibold text-base md:text-lg">
-								{item?.nama}
-							</p>
-						
+							<div className="flex items-center gap-8">
+								<p className="text-textColor font-semibold text-base md:text-lg">
+									{item?.nama}
+								</p>
+							</div>
+
 							<div className="flex items-center gap-8">
 								<p className="text-lg text-headingColor font-semibold">
 									<span className="text-sm text-red-500">Rp </span> {item?.harga}

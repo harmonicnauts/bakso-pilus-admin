@@ -6,7 +6,7 @@ import RowContainer from "./RowContainer";
 import { useStateValue } from "../context/StateProvider";
 
 const Menu = () => {
-	const [filter, setFilter] = useState("chicken");
+	const [filter, setFilter] = useState("");
 
 	const [{ foodItems }, dispatch] = useStateValue();
 
