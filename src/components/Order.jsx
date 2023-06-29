@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { getAllTransactions } from '../utils/firebaseFunctions';
 import { actionType } from '../context/reducer';
 import { useStateValue } from '../context/StateProvider';
-import TableContainer from './TableContainer';
+import CardContainer from './CardContainer';
 
 
 
@@ -36,7 +36,7 @@ const Order = () => {
 
   return (
     <div className='w-full h-auto min-h-screen flex flex-col items-center justify-center'>
-      <TableContainer
+      <CardContainer
         data={transactions}
         fields={fields}
         setFields={setFields}

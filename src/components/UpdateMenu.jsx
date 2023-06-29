@@ -2,7 +2,7 @@ import React from 'react'
 import Loader from './Loader';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MdFastfood, MdCloudUpload, MdDelete, MdAttachMoney } from 'react-icons/md'
+import { MdFastfood, MdCloudUpload, MdDelete, MdAttachMoney, MdModeEdit } from 'react-icons/md'
 import { categories } from '../utils/data';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
@@ -79,11 +79,7 @@ const UpdateMenu = () => {
 	};
 
 	//TODO Selesain jadinya nanti pas admin klik > upload file baru > ganti link di id yang direfernsi jadi link yang baru
-	const updateImage = () => {
-		setIsLoading(true);
-		const updateRef = ref(storage, imageAsset);
 
-	};
 
 	const saveDetails = () => {
 		setIsLoading(true);
@@ -100,7 +96,6 @@ const UpdateMenu = () => {
 
 			else {
 				const data = {
-					id: `${Date.now()}`,
 					nama: nama,
 					imageURL: imageAsset,
 					category: category,
@@ -299,23 +294,18 @@ const UpdateMenu = () => {
 
 							<div className='relative h-full'>
 								<img src={imageAsset} alt="uploaded" className='w-full h-full object-cover' />
-								{!isUpdate ?
-									<button type='button' className='absolute bottom-3 right-3 p-3 rounded-full bg-red-500
-						text-xl cursor-pointer outline-none hover:shadow-md duration-500 transition-all ease-in-out'
-										onClick={deleteImage}>
-										<MdDelete className='text-white' />
-									</button> :
 
-									<button type='button' className='absolute bottom-3 right-3 p-3 rounded-full bg-blue-500
+								<button type='button' className='absolute bottom-3 right-3 p-3 rounded-full bg-red-500
 						text-xl cursor-pointer outline-none hover:shadow-md duration-500 transition-all ease-in-out'
-										onClick={(() => { })}>
-										<MdDelete className='text-white' />
-									</button>
-								}
+									onClick={deleteImage}>
+									<MdDelete className='text-white' />
+								</button>
 
 							</div>
+
 						</>)}
-					</>)}
+					</>)
+					}
 				</div>
 
 				<div className='w-full flex flex-col md:flex-row items-center gap-3'>
