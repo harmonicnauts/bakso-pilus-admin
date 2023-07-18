@@ -34,6 +34,11 @@ export const getAllTransactions = async () => {
   return items.docs.map((doc) => doc.data());
 };
 
+export const saveOrders = async (data) => {
+  await setDoc(doc(firestore, 'transactions', `${Date.now()}`), data, { merge: true });
+  console.log('tidak ada eror pada file firebasefunc')
+};
+
 export const deleteItem = async (id) => {
   await deleteDoc(doc(firestore, "foodItems", id));
   // console.log(`Mencoba untuk menghapus item dengan ID ${id}`)

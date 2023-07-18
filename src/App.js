@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
-import Admin from './components/UpdateMenu';
 import Loader from './components/Loader';
 import { AnimatePresence } from 'framer-motion';
 import { getAllFoodItems, getAllTransactions } from './utils/firebaseFunctions';
@@ -10,6 +9,7 @@ import { actionType } from './context/reducer';
 import Order from './components/Order';
 import Transaksi from './components/Transaksi';
 import UpdateMenu from './components/UpdateMenu';
+import Kasir from './components/Kasir';
 
 function App() {
 
@@ -46,7 +46,8 @@ function App() {
         <Header />
         <main>
           <Routes>
-            <Route path="/" element={<Order />} />
+            <Route path="/" element={<Kasir />} />
+            <Route path="/order" element={<Order />} />
             <Route path="/transaksi" element={<Transaksi />} />
             <Route path="/updatemenu" element={<UpdateMenu />} />
 

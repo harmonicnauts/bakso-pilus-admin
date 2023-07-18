@@ -1,8 +1,8 @@
 export const actionType = {
-	SET_USER: 'SET_USER',
-	SET_FOOD_ITEMS: 'SET_FOOD_ITEMS',
+	SET_USER: "SET_USER",
+	SET_FOOD_ITEMS: "SET_FOOD_ITEMS",
+	SET_CARTITEMS: "SET_CARTITEMS",
 	SET_TRANSACTIONS: 'SET_TRANSACTIONS',
-
 }
 
 const reducer = (state, action) => {
@@ -25,6 +25,12 @@ const reducer = (state, action) => {
 			return {
 				...state,
 				transactions: action.transactions
+			};
+
+		case actionType.SET_CARTITEMS:
+			return {
+				...state,
+				cartItems: action.cartItems,
 			};
 
 		default:

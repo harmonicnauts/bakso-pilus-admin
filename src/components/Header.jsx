@@ -43,10 +43,25 @@ export default function Navigationbar() {
           className="p-1 font-normal"
         >
           <span className="flex items-center text-white">
+            Kasir
+          </span>
+        </Typography>
+      </Link>
+
+      <Link to={"/order"}>
+        <Typography
+          as="li"
+          href='#'
+          variant="small"
+          color="blue-gray"
+          className="p-1 font-normal"
+        >
+          <span className="flex items-center text-white">
             Pesanan
           </span>
         </Typography>
       </Link>
+
       <Link to={"/transaksi"}>
         <Typography
           as="li"
