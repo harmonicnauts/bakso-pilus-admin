@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MdNote, MdOutlineKeyboardBackspace, MdPerson } from "react-icons/md";
+import { MdNote, MdPerson } from "react-icons/md";
 import { RiRefreshFill } from "react-icons/ri";
 
 import { motion } from "framer-motion";
@@ -107,7 +107,7 @@ const Kasir = () => {
                 <textarea
                   type="textfield" required value={rincian} placeholder='Detail Pesanan'
                   onChange={(e) => { setRincian(e.target.value); }}
-                  className='w-full h-full text-lg text-white bg-transparent font-semibold p-1 align-middle'>
+                  className='w-full h-full text-lg text-black bg-transparent font-semibold p-1 align-middle'>
 
                 </textarea>
               </div>
@@ -125,7 +125,7 @@ const Kasir = () => {
                   type="button"
                   data-modal-target="payment-modal"
                   data-modal-toggle="payment-modal"
-                  className="w-full p-2 rounded-full bg-gradient-to-tr from-orange-400 to-orange-600 text-gray-50 text-lg my-2 hover:shadow-lg"
+                  className="w-full p-2 rounded-full bg-gradient-to-tr from-orange-400 to-orange-600 text-gray-50 text-lg my-2 hover:shadow-lg mb-10"
                   onClick={() => {
                     saveData(cartItems);
                   }}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { getAllTransactions } from '../utils/firebaseFunctions';
 import { actionType } from '../context/reducer';
 import { useStateValue } from '../context/StateProvider';
@@ -7,12 +7,6 @@ import TableContainer from './TableContainer';
 
 const Transaksi = () => {
   const [transactions, dispatch] = useStateValue();
-  const [fields, setFields] = useState(false); //Untuk error
-  const [alertStatus, setalertStatus] = useState("danger");
-  const [msg, setMsg] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-
 
   const fetchData = async () => {
     await getAllTransactions().then((data) => {
@@ -26,21 +20,13 @@ const Transaksi = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  });
 
 
   return (
     <div className='w-full h-auto min-h-screen flex flex-col items-center justify-center'>
       <TableContainer
         data={transactions}
-        fields={fields}
-        setFields={setFields}
-        alertStatus={alertStatus}
-        setalertStatus={setalertStatus}
-        msg={msg}
-        setMsg={setMsg}
-        isLoading={isLoading}
-        setIsLoading={setIsLoading}
       />
     </div>
   )

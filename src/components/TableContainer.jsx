@@ -1,13 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { MdCheck, MdClear } from 'react-icons/md';
-import { getAllTransactions, updateTransaction } from '../utils/firebaseFunctions';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react'
+import { getAllTransactions } from '../utils/firebaseFunctions';
 import { actionType } from '../context/reducer';
 import { useStateValue } from '../context/StateProvider';
 import { Typography } from '@material-tailwind/react';
 
 
-const TableContainer = (data, fields, setFields, alertStatus, setalertStatus, msg, setMsg, isLoading, setIsLoading) => {
+const TableContainer = (data) => {
   const data_transaksi = data.data.transactions;
   const [transactions, dispatch] = useStateValue();
 
@@ -22,14 +20,7 @@ const TableContainer = (data, fields, setFields, alertStatus, setalertStatus, ms
     );
   };
 
-  useEffect(() => {
-
-  }, []);
-
-
-
   const tableContainer = useRef();
-
 
   return (
     <div ref={tableContainer} className='w-[90vw] h-auto min-h-screen flex flex-col justify-top mt-10'>
@@ -59,7 +50,6 @@ const TableContainer = (data, fields, setFields, alertStatus, setalertStatus, ms
                 <th scope="col" class="px-6 py-3">
                   Pesanan
                 </th>
-
               </tr>
             </thead>
             <tbody>
@@ -94,9 +84,7 @@ const TableContainer = (data, fields, setFields, alertStatus, setalertStatus, ms
                       )}
                     </ul>
                   </td>
-
                 </tr>
-
               ))
                 :
                 <tr class="border-b border-gray-200 dark:border-gray-700">
@@ -107,7 +95,6 @@ const TableContainer = (data, fields, setFields, alertStatus, setalertStatus, ms
           </table>
         }
       </div>
-
     </div>
   )
 }

@@ -1,13 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { MdCheck, MdClear } from 'react-icons/md';
 import { getAllTransactions, updateTransaction } from '../utils/firebaseFunctions';
-import { motion } from 'framer-motion';
 import { actionType } from '../context/reducer';
 import { useStateValue } from '../context/StateProvider';
 import { Typography } from '@material-tailwind/react';
 
 
-const CardContainer = (data, fields, setFields, alertStatus, setalertStatus, msg, setMsg, isLoading, setIsLoading) => {
+const CardContainer = (data) => {
   const data_transaksi = data.data.transactions;
   const [transactions, dispatch] = useStateValue();
 
@@ -80,47 +79,50 @@ const CardContainer = (data, fields, setFields, alertStatus, setalertStatus, msg
           {
             data_transaksi && data_transaksi.length > 0 ? data_transaksi.filter((n) => n.done === false && n.status_pembayaran == true).map((item, i) => (
               <div
-                class="block rounded-lg bg-white  w-2/3 border-solid border-2 border-neutral-500 mb-4">
-                <p
-                  class=" px-6 py-3 text-neutral-800">
-                  Pesanan ke-{i + 1}
-                </p>
-                <div class="pl-6 pr-6">
-                  <div class="flex items-center mb-4">
-                    <input id="default-checkbox" checked={item.done} onChange={() => { changeDone(item.id, !item.done); fetchData() }} type="checkbox" value='' class="w-4 h-4 m-2 align-middle text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                    <h5
-                      class=" text-xl font-medium leading-tight text-neutral-800 flex">
-                      {item.nama_pelanggan}
-                    </h5>
+                class="flex rounded-lg bg-white  w-2/3 border-solid border-2 border-neutral-500 mb-4 flex-row ">
+
+                <div className='border-r-2 border-black'>
+                  <p
+                    class=" px-6 py-3 text-neutral-800">
+                    Pesanan ke-{i + 1}
+                  </p>
+                  <div class="pl-6 pr-6">
+                    <div class="flex items-center mb-4">
+                      <input id="default-checkbox" checked={item.done} onChange={() => { changeDone(item.id, !item.done); fetchData() }} type="checkbox" value='' class="w-4 h-4 m-2 align-middle text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                      <h5
+                        class=" text-xl font-medium leading-tight text-neutral-800 flex">
+                        {item.nama_pelanggan}
+                      </h5>
+                    </div>
+
+                    <p class="mb-4 text-base text-neutral-600 ">
+                      <b>Menu yang dipesan :</b>
+                      {item.data.map(n =>
+                      (<div>
+                        <p>{n.nama} {n.qty}x</p>
+                      </div>)
+                      )}
+                    </p>
+
+
+                    <button
+                      type="button"
+                      class="inline-block rounded bg-red-500 px-6 pb-2 pt-2.5 text-xl font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                      data-te-ripple-init
+                      data-te-ripple-color="light"
+                      onClick={() => { changeStat(item?.id, !item?.status_pembayaran); fetchData() }}>
+                      <MdClear />
+                    </button>
                   </div>
-
-                  <p class="mb-4 text-base text-neutral-600 ">
-                    Menu yang dipesan :
-                    {item.data.map(n =>
-                    (<div>
-                      <p>{n.nama} {n.qty}x</p>
-                    </div>)
-                    )}
-                  </p>
-
-                  <p class="mb-4 text-base text-neutral-600 ">
-                    Detail Pesanan :<br></br>
-                    {item.rincian}
-                  </p>
-                  <button
-                    type="button"
-                    class="inline-block rounded bg-red-500 px-6 pb-2 pt-2.5 text-xl font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-                    data-te-ripple-init
-                    data-te-ripple-color="light"
-                    onClick={() => { changeStat(item?.id, !item?.status_pembayaran); fetchData() }}
-                  >
-                    <MdClear />
-                  </button>
+                  <div
+                    class="text-neutral-600 px-6 py-3 border-neutral-600">
+                    Total : Rp {new Intl.NumberFormat().format(item.total)}
+                  </div>
                 </div>
-                <div
-                  class="text-neutral-600 px-6 py-3 border-neutral-600">
-                  Total : Rp {new Intl.NumberFormat().format(item.total)}
-                </div>
+                <p class="mb-4 text-base text-neutral-600 p-12 ">
+                  <b>Detail Pesanan :</b><br></br>
+                  {item.rincian}
+                </p>
               </div>
             )) :
 
@@ -147,46 +149,45 @@ const CardContainer = (data, fields, setFields, alertStatus, setalertStatus, msg
           {
             data_transaksi && data_transaksi.length > 0 ? data_transaksi.filter((n) => n.done === true && n.status_pembayaran == true).map((item, i) => (
               <div
-                class="block rounded-lg bg-white  w-2/3 border-solid border-2 border-neutral-500 mb-4">
-                <p
-                  class=" px-6 py-3 text-neutral-800">
-                  Pesanan ke-{i + 1}
-                </p>
-                <div class="pl-6 pr-6">
-                  <div class="flex items-center mb-4">
-                    <input id="default-checkbox" checked={item.done} onChange={() => { changeDone(item.id, !item.done); fetchData() }} type="checkbox" value='' class="w-4 h-4 m-2 align-middle text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                    <h5
-                      class=" text-xl font-medium leading-tight text-neutral-800 flex">
-                      {item.nama_pelanggan}
-                    </h5>
+                class="flex rounded-lg bg-white  w-2/3 border-solid border-2 border-neutral-500 mb-4 flex-row ">
+                <div className='border-r-2 border-black'>
+                  <div class="pl-6 pr-6">
+                    <div class="flex items-center mb-4 pt-4">
+                      <input id="default-checkbox" checked={item.done} onChange={() => { changeDone(item.id, !item.done); fetchData() }} type="checkbox" value='' class="w-4 h-4 m-2 align-middle text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                      <h5
+                        class=" text-xl font-medium leading-tight text-neutral-800 flex">
+                        {item.nama_pelanggan}
+                      </h5>
+                    </div>
+
+                    <p class="mb-4 text-base text-neutral-600 ">
+                      <b>Menu yang dipesan :</b>
+                      {item.data.map(n =>
+                      (<div>
+                        <p>{n.nama} {n.qty}x</p>
+                      </div>)
+                      )}
+                    </p>
+
+
+                    <button
+                      type="button"
+                      class="inline-block rounded bg-red-500 px-6 pb-2 pt-2.5 text-xl font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                      data-te-ripple-init
+                      data-te-ripple-color="light"
+                      onClick={() => { changeStat(item?.id, !item?.status_pembayaran); fetchData() }}>
+                      <MdClear />
+                    </button>
                   </div>
-
-                  <p class="mb-4 text-base text-neutral-600 ">
-                    Menu yang dipesan :
-                    {item.data.map(n =>
-                    (<div>
-                      <p>{n.nama} {n.qty}x</p>
-                    </div>)
-                    )}
-                  </p>
-
-                  <p class="mb-4 text-base text-neutral-600 ">
-                    Detail Pesanan :<br></br>
-                    {item.rincian}
-                  </p>
-                  <button
-                    type="button"
-                    class="inline-block rounded bg-red-500 px-6 pb-2 pt-2.5 text-xl font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-                    data-te-ripple-init
-                    data-te-ripple-color="light"
-                    onClick={() => { changeStat(item?.id, !item?.status_pembayaran); fetchData() }}>
-                    <MdClear />
-                  </button>
+                  <div
+                    class="text-neutral-600 px-6 py-3 border-neutral-600">
+                    Total : Rp {new Intl.NumberFormat().format(item.total)}
+                  </div>
                 </div>
-                <div
-                  class="text-neutral-600 px-6 py-3 border-neutral-600">
-                  Total : Rp {new Intl.NumberFormat().format(item.total)}
-                </div>
+                <p class="mb-4 text-base text-neutral-600 p-12 ">
+                  <b>Detail Pesanan :</b><br></br>
+                  {item.rincian}
+                </p>
               </div>
             )) :
 

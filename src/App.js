@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
-import Loader from './components/Loader';
 import { AnimatePresence } from 'framer-motion';
 import { getAllFoodItems, getAllTransactions } from './utils/firebaseFunctions';
 import { useEffect } from 'react';
@@ -14,7 +13,6 @@ import Kasir from './components/Kasir';
 function App() {
 
   const [{ }, dispatch] = useStateValue();
-
   const fetchData = async () => {
     await getAllFoodItems().then((data) => {
       dispatch({
@@ -23,7 +21,6 @@ function App() {
       });
     }
     );
-
     await getAllTransactions().then((data) => {
       dispatch({
         type: actionType.SET_TRANSACTIONS,
@@ -32,12 +29,8 @@ function App() {
     }
     );
   };
-
-
-
   useEffect(() => {
     fetchData()
-
   }, []);
 
   return (

@@ -9,11 +9,6 @@ import CardContainer from './CardContainer';
 const Order = () => {
 
   const [transactions, dispatch] = useStateValue();
-  const [fields, setFields] = useState(false); //Untuk error
-  const [alertStatus, setalertStatus] = useState("danger");
-  const [msg, setMsg] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-
 
 
   const fetchData = async () => {
@@ -38,15 +33,6 @@ const Order = () => {
     <div className='w-full h-auto min-h-screen flex flex-col items-center justify-center'>
       <CardContainer
         data={transactions}
-        fields={fields}
-        setFields={setFields}
-        alertStatus={alertStatus}
-        setalertStatus={setalertStatus}
-        msg={msg}
-        setMsg={setMsg}
-        isLoading={isLoading}
-        setIsLoading={setIsLoading}
-
       />
     </div>
   )

@@ -4,9 +4,8 @@ import { motion } from "framer-motion";
 import NotFound from "../img/NotFound.png"
 import { useStateValue } from "../context/StateProvider";
 import { actionType } from "../context/reducer";
-import { getAllFoodItems } from "../utils/firebaseFunctions";
 
-const AdminMenu = ({ flag, data, nama, setNama, harga, setHarga, category, setCategory, fields, setFields, alertStatus, setalertStatus, msg, setMsg, imageAsset, setImageAsset, isLoading, setIsLoading, isUpdate, setisUpdate, id, setId }) => {
+const AdminMenu = ({ flag, data }) => {
 
   const rowContainer = useRef();
   const [{ cartItems }, dispatch] = useStateValue();
@@ -16,15 +15,6 @@ const AdminMenu = ({ flag, data, nama, setNama, harga, setHarga, category, setCa
     addtocart();
   }, [items]);
 
-  const fetchData = async () => {
-    await getAllFoodItems().then((data) => {
-      dispatch({
-        type: actionType.SET_FOOD_ITEMS,
-        foodItems: data,
-      });
-    }
-    );
-  };
 
   const addtocart = () => {
     dispatch({
@@ -34,7 +24,6 @@ const AdminMenu = ({ flag, data, nama, setNama, harga, setHarga, category, setCa
     localStorage.setItem("cartItems", JSON.stringify(items));
   };
 
-  // console.log('test data rowcont.js ', data.length)
 
   return (
     <div

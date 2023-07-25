@@ -2,19 +2,16 @@ import React from 'react'
 import Loader from './Loader';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MdFastfood, MdCloudUpload, MdDelete, MdAttachMoney, MdModeEdit } from 'react-icons/md'
+import { MdFastfood, MdCloudUpload, MdDelete, MdAttachMoney } from 'react-icons/md'
 import { categories } from '../utils/data';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-
 import { storage } from '../firebase.config';
 import { getAllFoodItems, saveItem, updateItem } from '../utils/firebaseFunctions';
 import { useStateValue } from '../context/StateProvider';
 import { actionType } from '../context/reducer';
 import RowContainer from './RowContainer';
 import { Typography } from '@material-tailwind/react';
-// import { ThemeProvider, createTheme } from '@mui/material'
-// import MaterialTable from 'material-table';
-// import DataTable from './DataTable';
+import { v4 as uuidv4 } from 'uuid';
 
 const UpdateMenu = () => {
 
@@ -29,7 +26,6 @@ const UpdateMenu = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isUpdate, setisUpdate] = useState(false);
 	const [{ foodItems }, dispatch] = useStateValue();
-	// const [filter, setFilter] = useState("bakso");
 
 
 	const uploadImage = (e) => {
@@ -39,7 +35,6 @@ const UpdateMenu = () => {
 		const uploadTask = uploadBytesResumable(storageRef, imageFile);
 
 		uploadTask.on('state_changed', (snapshot) => {
-			// const uploadProgress = snapshot.bytesTransferred / snapshot.totalBytes * 100;
 		}, (error) => {
 			console.log(error)
 			setFields(true)
@@ -78,9 +73,6 @@ const UpdateMenu = () => {
 		});
 	};
 
-	//TODO Selesain jadinya nanti pas admin klik > upload file baru > ganti link di id yang direfernsi jadi link yang baru
-
-
 	const saveDetails = () => {
 		setIsLoading(true);
 		try {
@@ -93,16 +85,15 @@ const UpdateMenu = () => {
 					setIsLoading(false);
 				}, 4000)
 			}
-
 			else {
 				const data = {
+					id: uuidv4(),
 					nama: nama,
 					imageURL: imageAsset,
 					category: category,
 					qty: 1,
 					harga: harga
 				}
-
 				saveItem(data);
 				setIsLoading(false);
 				setFields(true);
@@ -112,7 +103,6 @@ const UpdateMenu = () => {
 				setTimeout(() => {
 					setFields(false);
 				}, 4000);
-
 			}
 		} catch (error) {
 			console.log(error)
@@ -124,13 +114,11 @@ const UpdateMenu = () => {
 				setIsLoading(false);
 			}, 4000)
 		}
-
 		fetchData();
 	};
 
 	const updateDetails = (id) => {
 		setIsLoading(true);
-
 		try {
 			if (!nama || !harga || !imageAsset || !category) {
 				setFields(true)
@@ -141,7 +129,6 @@ const UpdateMenu = () => {
 					setIsLoading(false);
 				}, 4000)
 			}
-
 			else {
 				const data = {
 					nama: nama,
@@ -150,7 +137,6 @@ const UpdateMenu = () => {
 					qty: 1,
 					harga: harga
 				}
-
 				updateItem(id, data);
 				setIsLoading(false);
 				setFields(true);
@@ -160,7 +146,6 @@ const UpdateMenu = () => {
 				setTimeout(() => {
 					setFields(false);
 				}, 4000);
-
 			}
 		} catch (error) {
 			console.log(error)
@@ -172,10 +157,8 @@ const UpdateMenu = () => {
 				setIsLoading(false);
 			}, 4000)
 		}
-
 		fetchData();
 	}
-
 
 	const clearData = () => {
 		setNama("");
@@ -189,7 +172,6 @@ const UpdateMenu = () => {
 		$select.value = 'other'
 	};
 
-
 	const fetchData = async () => {
 		await getAllFoodItems().then((data) => {
 			dispatch({
@@ -200,22 +182,8 @@ const UpdateMenu = () => {
 		);
 	};
 
-	// const defaultMaterialTheme = createTheme();
-
-	// let products; // Declare the variable
-
-	// getAllFoodItems().then((data) => {
-	// 	products = data; // Assign the value of data to the products variable
-	// 	// Perform any other operations with the products variable here
-	// });
-	// console.log('products : ', products);
-	// console.log('foodItems : ', foodItems.foodItems);
-
-
-
 	return (
 		<div className='w-full h-auto min-h-screen flex flex-col items-center justify-center'>
-
 			<div className='w-full py-2 flex gap-2 justify-center align-middle mb-4 mt-4'>
 				<Typography variant="h3">
 					Tambahkan Menu Baru
@@ -363,65 +331,6 @@ const UpdateMenu = () => {
 				setisUpdate={setisUpdate}
 				setId={setId}
 			/>
-
-
-			{/* <DataTable
-				className='w-[90%] md:w-[75%] border border-gray-300 rounded-lg p-4 
-			flex flex-col items-center justify-center gap-4'
-				columns={[
-					{
-						title: "Gambar",
-						field: "imageURL",
-						render: (rowData) => (
-							<img src={rowData.imageURL} alt='gambar produk' />
-						)
-					}
-					, {
-						title: "Nama",
-						field: "nama"
-					}
-					, {
-						title: "Harga",
-						field: "harga",
-
-					}
-					, {
-						title: "Kategori",
-						field: "category",
-
-					}
-				]}
-
-				data={foodItems.foodItems}
-			/> */}
-
-
-			{/* <ThemeProvider theme={defaultMaterialTheme}>
-				<MaterialTable
-					columns={[
-						{
-							title: "Gambar",
-							field: "imageURL"
-						}
-						, {
-							title: "Nama",
-							field: "nama"
-						}
-						, {
-							title: "Harga",
-							field: "harga",
-
-						}
-						, {
-							title: "Kategori",
-							field: "category",
-
-						}]}
-
-					data={products}
-				/>
-			</ThemeProvider> */}
-
 		</div>
 	)
 }

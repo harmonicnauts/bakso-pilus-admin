@@ -67,8 +67,8 @@ const RowContainer = ({ flag, data, nama, setNama, harga, setHarga, category, se
 							>
 								<img
 									src={item?.imageURL}
-									alt=""
-									className="w-full h-full object-contain"
+									alt="item image"
+									className=" h-[85%] object-contain rounded-full"
 								/>
 							</motion.div>
 
