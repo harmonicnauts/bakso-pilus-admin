@@ -20,7 +20,7 @@ const Transaksi = () => {
 
   useEffect(() => {
     fetchData();
-  });
+  }, []);
 
 
   return (

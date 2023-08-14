@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Loader from './Loader';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -26,6 +26,12 @@ const UpdateMenu = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isUpdate, setisUpdate] = useState(false);
 	const [{ foodItems }, dispatch] = useStateValue();
+
+
+
+	useEffect(() => {
+		fetchData();
+	}, []);
 
 
 	const uploadImage = (e) => {

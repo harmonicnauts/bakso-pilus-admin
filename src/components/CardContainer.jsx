@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
-import { MdCheck, MdClear } from 'react-icons/md';
-import { getAllTransactions, updateTransaction } from '../utils/firebaseFunctions';
+import { MdCheck, MdClear, MdDelete } from 'react-icons/md';
+import { deleteTransaction, getAllTransactions, updateTransaction } from '../utils/firebaseFunctions';
 import { actionType } from '../context/reducer';
 import { useStateValue } from '../context/StateProvider';
 import { Typography } from '@material-tailwind/react';
@@ -32,24 +32,19 @@ const CardContainer = (data) => {
   const cardContainer = useRef();
 
   const changeStat = (id, currStat) => {
-
     try {
       const newStat = currStat;
       const data = {
         status_pembayaran: newStat
       }
-
       console.log('newStat =', newStat, 'data =', data);
       updateTransaction(id, data);
-
     }
     catch (error) {
       console.log(error)
     }
 
     fetchData();
-
-
   };
 
   const changeDone = (id, currDone) => {
@@ -80,7 +75,6 @@ const CardContainer = (data) => {
             data_transaksi && data_transaksi.length > 0 ? data_transaksi.filter((n) => n.done === false && n.status_pembayaran == true).map((item, i) => (
               <div
                 class="flex rounded-lg bg-white  w-2/3 border-solid border-2 border-neutral-500 mb-4 flex-row ">
-
                 <div className='border-r-2 border-black'>
                   <p
                     class=" px-6 py-3 text-neutral-800">
@@ -94,7 +88,6 @@ const CardContainer = (data) => {
                         {item.nama_pelanggan}
                       </h5>
                     </div>
-
                     <p class="mb-4 text-base text-neutral-600 ">
                       <b>Menu yang dipesan :</b>
                       {item.data.map(n =>
@@ -103,8 +96,6 @@ const CardContainer = (data) => {
                       </div>)
                       )}
                     </p>
-
-
                     <button
                       type="button"
                       class="inline-block rounded bg-red-500 px-6 pb-2 pt-2.5 text-xl font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
@@ -125,27 +116,19 @@ const CardContainer = (data) => {
                 </p>
               </div>
             )) :
-
               (
                 <p> tidak ada data</p>
               )
           }
         </div>
 
-        <br />
-        <br />
-        <br />
-
-
-
+        <br />  <br />  <br />
         <div className='align-middle justify-center text-center mb-8'>
           <Typography variant='h3' classname='text-center justify-center '>
             Pesanan yang Sudah Selesai Dilayani
           </Typography>
         </div>
-
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg flex flex-wrap justify-center">
-
           {
             data_transaksi && data_transaksi.length > 0 ? data_transaksi.filter((n) => n.done === true && n.status_pembayaran == true).map((item, i) => (
               <div
@@ -159,7 +142,6 @@ const CardContainer = (data) => {
                         {item.nama_pelanggan}
                       </h5>
                     </div>
-
                     <p class="mb-4 text-base text-neutral-600 ">
                       <b>Menu yang dipesan :</b>
                       {item.data.map(n =>
@@ -168,8 +150,6 @@ const CardContainer = (data) => {
                       </div>)
                       )}
                     </p>
-
-
                     <button
                       type="button"
                       class="inline-block rounded bg-red-500 px-6 pb-2 pt-2.5 text-xl font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
@@ -190,22 +170,18 @@ const CardContainer = (data) => {
                 </p>
               </div>
             )) :
-
               (
                 <p> tidak ada data</p>
               )
           }
-
         </div>
       </div>
-
       <div className='w-[25%] h-auto min-h-screen flex flex-col justify-top mt-10 border-l-slate-500 border-2 '>
         <div className='align-middle justify-center text-center mb-8'>
           <Typography variant='h4' classname='text-center justify-center '>
             Pesanan belum dibayar
           </Typography>
         </div>
-
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg flex flex-wrap justify-center">
           {
             data_transaksi && data_transaksi.length > 0 ? data_transaksi.filter((n) => n.status_pembayaran === false).map((item, i) => (
@@ -222,7 +198,6 @@ const CardContainer = (data) => {
                       {item.nama_pelanggan}
                     </h5>
                   </div>
-
                   <button
                     type="button"
                     class="inline-block rounded bg-green-500 px-6 pb-2 pt-2.5 text-lg font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
@@ -231,14 +206,24 @@ const CardContainer = (data) => {
                     onClick={() => { changeStat(item?.id, !item?.status_pembayaran); fetchData() }}>
                     <MdCheck />
                   </button>
+
+                  <button
+                    type="button"
+                    class="inline-block rounded bg-red-500 px-6 pb-2 ml-2 pt-2.5 text-lg font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                    data-te-ripple-init
+                    data-te-ripple-color="light"
+                    onClick={() => { deleteTransaction(item?.id) }}>
+                    <MdDelete />
+                  </button>
                 </div>
                 <div
                   class="text-neutral-600 px-6 py-3 border-neutral-600">
                   Total : Rp {new Intl.NumberFormat().format(item.total)}
                 </div>
+
+
               </div>
             )) :
-
               (
                 <p> tidak ada data</p>
               )

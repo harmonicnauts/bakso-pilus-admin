@@ -61,7 +61,6 @@ const Kasir = () => {
       >
         <div className="w-full flex items-center justify-between p-4">
           <p className="text-textColor text-lg font-semibold">Pesanan</p>
-
           <motion.p
             whileTap={{ scale: 0.75 }}
             className="flex items-center gap-2 p-1 px-2 my-2 bg-gray-100 rounded-md hover:shadow-md  cursor-pointer text-textColor text-base"
@@ -71,7 +70,6 @@ const Kasir = () => {
             <RiRefreshFill />
           </motion.p>
         </div>
-
         {/* bottom section */}
         {cartItems && cartItems.length > 0 ? (
           <div className="w-full h-full bg-white flex flex-col">
@@ -81,15 +79,10 @@ const Kasir = () => {
               {cartItems &&
                 cartItems.length > 0 &&
                 cartItems.map((item) => (
-                  <CartItem
-                    key={item.id}
-                    item={item}
-                    setFlag={setFlag}
-                    flag={flag}
+                  <CartItem key={item.id} item={item} setFlag={setFlag} flag={flag}
                   />
                 ))}
             </div>
-
             {/* cart total section */}
             <div className="w-full flex-1 bg-white rounded-t-[2rem] flex flex-col items-center justify-evenly px-8 py-2">
               <div className='w-full py-2 border-b border-gray-300 flex items-center gap-2'>
@@ -98,27 +91,22 @@ const Kasir = () => {
                   type="text" required value={namaPelanggan} placeholder='Nama Pelanggan'
                   onChange={(e) => { setNamaPelanggan(e.target.value); }}
                   className='w-full h-full text-lg text-black bg-transparent font-semibold p-1'>
-
                 </input>
               </div>
-
               <div className='w-full py-2 border-b border-gray-300 flex items-center gap-2'>
                 <MdNote className='text-xl text-black' />
                 <textarea
                   type="textfield" required value={rincian} placeholder='Detail Pesanan'
                   onChange={(e) => { setRincian(e.target.value); }}
                   className='w-full h-full text-lg text-black bg-transparent font-semibold p-1 align-middle'>
-
                 </textarea>
               </div>
-
               <div className="w-full flex items-center justify-between">
                 <p className="text-black text-xl font-semibold">Total</p>
                 <p className="text-black text-xl font-semibold">
                   Rp{tot}
                 </p>
               </div>
-
               {(
                 <motion.button
                   whileTap={{ scale: 0.8 }}
@@ -148,7 +136,6 @@ const Kasir = () => {
       <AdminMenu
         data={foodItems} />
     </div>
-
   );
 };
 

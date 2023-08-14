@@ -7,9 +7,7 @@ import CardContainer from './CardContainer';
 
 
 const Order = () => {
-
   const [transactions, dispatch] = useStateValue();
-
 
   const fetchData = async () => {
     await getAllTransactions().then((data) => {
@@ -25,10 +23,7 @@ const Order = () => {
     fetchData();
   }, []);
 
-
   console.log('test transactions ', transactions.transactions)
-
-
   return (
     <div className='w-full h-auto min-h-screen flex flex-col items-center justify-center'>
       <CardContainer
