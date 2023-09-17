@@ -62,7 +62,7 @@ const CartItem = ({ item, setFlag, flag }) => {
 			<div className="flex flex-col gap-2">
 				<p className="text-base text-black">{item?.nama}</p>
 				<p className="text-sm block text-black font-semibold">
-					$ {parseFloat(item?.harga) * qty}
+					Rp {parseFloat(item?.harga) * qty}
 				</p>
 			</div>
 
